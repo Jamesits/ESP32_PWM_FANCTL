@@ -2,7 +2,7 @@ ESP32 program for controlling 4-pin PC fan.
 
 Wiring: 
 * Hook GPIO16 to the blue (RPM input) pin of the fan
-* Connect all the GNDs
+* Connect ESP32 GND and fan GND
 * Wire a push button between GPIO27 and GND
 
 Usage:

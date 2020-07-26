@@ -10,10 +10,10 @@
 
 #define DEBOUNCE_COOLDOWN_MICROS 10000
 
-volatile int percentage = 0;
-volatile int debounce_status = 0;
-// 0: start
-// 1: triggering
+#define INITIAL_FAN_PERCENTAGE 100 // percent, step 10
+
+volatile int percentage = INITIAL_FAN_PERCENTAGE;
+volatile int debounce_status = 0; // 0: stable 1: triggering
 unsigned long debounce_trigger_time;
 
 void IRAM_ATTR btn_down() {
