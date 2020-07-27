@@ -10,7 +10,10 @@
 
 #define DEBOUNCE_COOLDOWN_MICROS 10000
 
-#define INITIAL_FAN_PERCENTAGE 100 // percent, step 10
+#define INITIAL_FAN_PERCENTAGE 100
+#define MIN_PERCENTAGE 0
+#define MAX_PERCENTAGE 100
+#define PERCENTAGE_STEP 10
 
 int percentage = INITIAL_FAN_PERCENTAGE;
 volatile int debounce_status = 0; // 0: stable 1: triggering
@@ -38,11 +41,16 @@ void loop()
 {
   if (debounce_status == 1 && micros() - debounce_trigger_time > DEBOUNCE_COOLDOWN_MICROS) {
     debounce_status = 0;
-    percentage += 10;
-    if (percentage > 100) percentage = 0;
+    
+    percentage += PERCENTAGE_STEP;
+    if (percentage > MAX_PERCENTAGE) percentage = MIN_PERCENTAGE;
+    
     int dutyCycle = 255 * percentage / 100;
+    if (dutyCycle > 255) dutyCycle = 255;
+    if (dutyCycle < 0) dutyCycle = 0;
+    
     ledcWrite(0, dutyCycle);
-    ledcWrite(1, 255-dutyCycle);
+    ledcWrite(1, 255 - dutyCycle);  // the built-in LED is pulled up
   }
   
   delay(10);
